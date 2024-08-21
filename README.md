@@ -1,24 +1,15 @@
-# Agilehub
+## AgileHub
 
-## Project setup
-```
-npm install
-```
+Vuejs and Nextjs project managements system.
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+# Generate production build
 
-### Compiles and minifies for production
-```
-npm run build
-```
+    npm run build
 
-### Lints and fixes files
-```
-npm run lint
-```
+# Run the development server
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+    npm run dev
+
+# Start the production server
+
+    npm start
