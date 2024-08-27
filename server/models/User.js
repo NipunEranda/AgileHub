@@ -1,44 +1,6 @@
-import mongoose, { ObjectId } from "mongoose";
+import mongoose, { ObjectId, Schema, model } from "mongoose";
 
-export interface _User {
-    _id: string;
-    avatar_url: string;
-    bio: string;
-    company: string;
-    created_at: string;
-    email: string;
-    followers: number;
-    following: number;
-    html_url: string;
-    id: number;
-    location: string;
-    login: string;
-    name: string;
-    public_repos: number;
-    type: string;
-    workspaces: string[];
-  }
-  
-  export interface UserDocument extends _User, mongoose.Document {
-    _id: string;
-    avatar_url: string;
-    bio: string;
-    company: string;
-    created_at: string;
-    email: string;
-    followers: number;
-    following: number;
-    html_url: string;
-    id: number;
-    location: string;
-    login: string;
-    name: string;
-    public_repos: number;
-    type: string;
-    workspaces: string[];
-  }
-  
-  const UserSchema = new mongoose.Schema({
+  const UserSchema = new Schema({
     avatar_url: {
       type: String,
       required: false,
@@ -119,4 +81,6 @@ export interface _User {
   UserSchema.index({ id: 1 });
   
   // Create github user schema
-  export const userSchema = mongoose.model<_User>("user", UserSchema);
+  const userSchema = model("user", UserSchema);
+
+  export default userSchema;

@@ -2,8 +2,7 @@
 import Image from "next/image";
 import { useSearchParams, usePathname } from "next/navigation";
 import axios from "axios";
-import utils from "@/utils";
-import { useEffect } from "react";
+import utils from "../utils";
 
 export default function Index() {
   if (utils.isClient()) {

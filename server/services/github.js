@@ -4,7 +4,7 @@ import { _User } from "../models/User";
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { _Branch, _Repository } from "../models/Repository";
 
-const getUserDetails = async (token: string) => {
+const getUserDetails = async (token) => {
   try {
     const response = await axios.get(
       `${process.env.VUE_APP_GITHUB_API_URL}/user`,
@@ -13,14 +13,14 @@ const getUserDetails = async (token: string) => {
         withCredentials: true,
       }
     );
-    const user: _User = response.data;
+    const user = response.data;
     return response ? user : null;
   } catch (e) {
     return e;
   }
 };
 
-const getUserEmail = async (token: string) => {
+const getUserEmail = async (token) => {
   try {
     const response = await axios.get(
       `${process.env.VUE_APP_GITHUB_API_URL}/user/emails`,
@@ -31,7 +31,7 @@ const getUserEmail = async (token: string) => {
     );
     return response
       ? response.data.filter(
-          (email: { [x: string]: any }) => email["primary"]
+          (email) => email["primary"]
         )[0]
       : null;
   } catch (e) {
