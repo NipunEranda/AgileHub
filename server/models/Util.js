@@ -1,13 +1,15 @@
-import mongoose, { mongo } from "mongoose";
+const mongoose = require("mongoose");
 
-export const connectMongoose = async () => {
+exports.connectMongoose = async () => {
   if (process.env.MONGO_URL && process.env.MONGO_DB) {
     // console.log("Connected to mongodb!");
-    await mongoose.connect(`${process.env.MONGO_URL}/${process.env.MONGO_DB}?retryWrites=true&`);
+    await mongoose.connect(
+      `${process.env.MONGO_URL}/${process.env.MONGO_DB}?retryWrites=true&`
+    );
   }
 };
 
-export const closeMongooseConnection = async () => {
+exports.closeMongooseConnection = async () => {
   if (mongoose.connection) {
     // console.log("mongodb connection closed!");
     await mongoose.connection.close();

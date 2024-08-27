@@ -1,13 +1,20 @@
 "use client";
 import Image from "next/image";
-import { useSearchParams, usePathname } from "next/navigation";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import axios from "axios";
 import utils from "../utils";
 
 export default function Index() {
+  const router = useRouter();
+
   if (utils.isClient()) {
     if (useSearchParams().get("code"))
-      axios.get(`/api/auth/login/${useSearchParams().get("code")}`);
+      axios
+        .get(`/api/auth/login/${useSearchParams().get("code")}`)
+        .then((response) => {
+          if (response.status == 200) router.push("/dashboard");
+          else router.push("/");
+        });
   }
 
   function redirectGithubLogin() {
