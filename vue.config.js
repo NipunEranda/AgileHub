@@ -5,7 +5,7 @@ const webpack = require('webpack');
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
-    proxy: "http://localhost:3000",
+    proxy: "http://localhost:8888",
   },
   configureWebpack: {
     plugins: [

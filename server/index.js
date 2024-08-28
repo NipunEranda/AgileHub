@@ -26,7 +26,7 @@ app.get("*", (req, res) => {
 });
 
 // Set the port to 3000 or any other port
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8888;
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
