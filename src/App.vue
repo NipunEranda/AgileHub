@@ -1,30 +1,56 @@
 <template>
-  <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </nav>
-  <router-view />
+  <div>
+    <div
+      id="loading-screen"
+      class="fixed inset-0 bg-white dark:bg-black bg-opacity-50 dark:bg-opacity-40 min-h-full z-10 hidden"
+    >
+      <div
+        class="m-auto border-neutral-800 dark:border-neutral-300 h-20 w-20 animate-spin rounded-full border-x-8 absolute bottom-0 left-0 right-0 mb-32"
+      ></div>
+    </div>
+    <Header v-if="showHeader" />
+    <div
+      :class="{
+        'pt-16 p-4': user ? (user.id == 0 ? true : false) : false,
+        'p-4 pt-16': user ? (user.id == 0 ? false : true) : true,
+      }"
+      class="dark:bg-zinc-800 min-h-svh"
+    >
+      <router-view />
+    </div>
+  </div>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script setup>
+import { useRoute } from "vue-router";
+import { ref, watch } from "vue";
+import { useStore } from "vuex";
+import { key } from "./store";
+import "@/utils/uiTools";
+import Cookies from "js-cookie";
 
-nav {
-  padding: 30px;
+const route = useRoute();
+const store = useStore(key);
 
-  a {
-    font-weight: bold;
-    color: #2c3e50;
+const user = ref(store.state.auth.currentUser);
 
-    &.router-link-exact-active {
-      color: #42b983;
-    }
+let showHeader = ref(false);
+let userTheme = ref(localStorage.getItem("userTheme"));
+
+watch(route, async () => {
+  if (
+    !(route.name == "index" || route.name == "workspaces") &&
+    Cookies.get("local._token")
+  )
+    showHeader.value = true;
+  else showHeader.value = false;
+
+  userTheme = ref(localStorage.getItem("userTheme"));
+  if (!userTheme.value) localStorage.setItem("userTheme", "dark");
+  if (userTheme.value == "light") {
+    document.documentElement.classList.remove("dark");
+  } else {
+    document.documentElement.classList.add("dark");
   }
-}
-</style>
+});
+</script>

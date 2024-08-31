@@ -5,6 +5,6 @@ exports.authInit = (prefix, app) => {
     await login(req, res);
   });
   app.get(`${prefix}/auth`, async (req, res) => {
-    res.status(200).json({ success: true });
+    res.status(200).send({ success: true });
   });
 };

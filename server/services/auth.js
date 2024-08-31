@@ -8,7 +8,7 @@ exports.login = async (req, res) => {
     let user;
     const response = await axios({
       method: "post",
-      url: `https://github.com/login/oauth/access_token?client_id=${process.env.NEXT_PUBLIC_GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_SECRET}&code=${req.params.code}&redirect_uri=${process.env.NEXT_PUBLIC_GITHUB_REDIRECT_URI}`,
+      url: `https://github.com/login/oauth/access_token?client_id=${process.env.VUE_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_SECRET}&code=${req.params.code}&redirect_uri=${process.env.VUE_APP_GITHUB_REDIRECT_URI}`,
       headers: {
         accept: "application/json",
       },
@@ -46,6 +46,7 @@ exports.login = async (req, res) => {
         if (!existingUser) {
           user = await userSchema.create(user);
         }
+
         res.cookie("token", `Bearer ${response.data.access_token}`, {
           httpOnly: true,
           secure: true,
@@ -70,7 +71,7 @@ exports.login = async (req, res) => {
     }
   } catch (e) {
     console.log(e);
-    return { status: 500, error: e.message };
+    res.status(500).json({ error: e.message });
   } finally {
     util.closeMongooseConnection();
   }
