@@ -1,13 +1,13 @@
-const webpack = require('webpack');
-const path = require('path');
-const nodeExternals = require('webpack-node-externals');
-const TerserPlugin = require('terser-webpack-plugin');
+// const webpack = require("webpack");
+const path = require("path");
+const nodeExternals = require("webpack-node-externals");
+const TerserPlugin = require("terser-webpack-plugin");
 
 const config = {
   // set to false because __dirname resolving to / instead of absolute path when
   // built using webpack
   node: {
-    __dirname: false
+    __dirname: false,
   },
   module: {
     rules: [
@@ -15,26 +15,26 @@ const config = {
         test: /\.js$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
-            presets: ['@babel/preset-env'],
+            presets: ["@babel/preset-env"],
           },
-        }
-      }
-    ]
+        },
+      },
+    ],
   },
   // set to development to read .env.local variables
-  mode: 'development'
+  mode: "development",
 };
 
 const serverConfig = Object.assign({}, config, {
   // set target to node to fix build warnings
-  target: 'node',
-  name: 'server',
-  entry: __dirname + '/server/index.js',
+  target: "node",
+  name: "server",
+  entry: __dirname + "/server/index.js",
   output: {
-    path: path.resolve(__dirname + '/dist'),
-    filename: 'index.js'
+    path: path.resolve(__dirname + "/dist"),
+    filename: "index.js",
   },
   // webpack-node-externals package used to exclude other packages like express
   // in the final bundle.js

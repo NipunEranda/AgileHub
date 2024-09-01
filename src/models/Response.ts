@@ -1,7 +1,7 @@
-export interface Response{
-    status: number;
-    body: Object;
-    message: string;
+export interface Response {
+  status: number;
+  body: JSON;
+  message: string;
 }
 
 // const responseHandler = (status: number, data: Object, message: string) => {

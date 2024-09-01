@@ -65,7 +65,6 @@ const AuthModule = {
       try {
         util.showLoadingScreen();
         const loginResponse = await axios.get(`/api/auth/login/${code}`);
-
         if (loginResponse.status == 200) {
           context.commit("setCurrentUser", loginResponse.data);
           store.commit("setLoggedIn", true);

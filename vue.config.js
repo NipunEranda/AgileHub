@@ -1,17 +1,17 @@
 // vue.config.js
 const { defineConfig } = require("@vue/cli-service");
-const webpack = require('webpack');
+const webpack = require("webpack");
 
 module.exports = defineConfig({
   transpileDependencies: true,
   devServer: {
-    "port": 3000,
+    port: 3000,
     proxy: {
-      '/api': {
-        target: 'http://localhost:8888',
+      "/api": {
+        target: "http://localhost:8888",
         changeOrigin: true,
-      }
-    }
+      },
+    },
   },
   configureWebpack: {
     plugins: [
