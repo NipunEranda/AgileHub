@@ -344,18 +344,18 @@ let users: Ref<_User[]> = ref([]);
 let projects: Ref<_Project[]> = ref([]);
 let filteredProjects: Ref<_Project[]> = ref([]);
 
-let project: Ref<Project> = ref(Project.createEmptyObject());
+let project: Ref<Project | null> = ref(Project.createEmptyObject());
 
 function openNewProjectModal() {
   mainModal.value = {
     title: "New Project",
-    type: "edit",
+    type: "add",
   };
   project.value = Project.createEmptyObject();
   showModal("mainModal");
 }
 
-function openEditProjectModal(p) {
+function openEditProjectModal(p: _Project) {
   mainModal.value = {
     title: "Edit Project",
     type: "edit",

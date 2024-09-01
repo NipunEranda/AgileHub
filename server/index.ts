@@ -3,12 +3,16 @@ import path from "path";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotEnv from "dotenv";
+import bodyParser from "body-parser";
+import compression from "compression";
 
 import authInit from "./routes/auth";
 import projectInit from "./routes/project";
 
 const app = express();
 dotEnv.config();
+
+app.use(compression());
 
 const prefix = "/api";
 const port =
@@ -26,6 +30,8 @@ app.use(
 );
 
 app.use(cookieParser());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 // Use the middleware for all routes
 app.use(function (req, res, next) {

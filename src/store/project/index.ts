@@ -38,7 +38,7 @@ const ProjectModule = {
             withCredentials: true,
           },
         });
-        context.commit("setProjects", projectsResponse.data.data);
+        context.commit("setProjects", projectsResponse.data);
       } catch (e) {
         console.log(e);
         store.dispatch("handleRequestErrors", e);
@@ -54,8 +54,8 @@ const ProjectModule = {
             withCredentials: true,
           },
         });
-        context.commit("setProjects", projectsResponse.data.data);
-        return projectsResponse.data.data;
+        context.commit("setProjects", projectsResponse.data);
+        return projectsResponse.data;
       } catch (e) {
         console.log(e);
         store.dispatch("handleRequestErrors", e);
@@ -71,8 +71,8 @@ const ProjectModule = {
             withCredentials: true,
           },
         });
-        context.commit("setProjects", projectsResponse.data.data);
-        return projectsResponse.data.data;
+        context.commit("setProjects", projectsResponse.data);
+        return projectsResponse.data;
       } catch (e) {
         console.log(e);
         store.dispatch("handleRequestErrors", e);

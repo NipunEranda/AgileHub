@@ -27,8 +27,6 @@ const authInit = (prefix: string, app: Application) => {
     } catch (e) {
       console.log(e);
       res.status(500).send({ data: null, error: e });
-    } finally {
-      await closeMongooseConnection();
     }
   });
 };
