@@ -3,14 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "rm -rf dist && rm -rf dist-server && npm run build:client && npm run build:server && npm run generate:packagejson",
+    "build": "rm -rf dist && rm -rf dist-server && npm run build:all && npm run generate:packagejson",
+    "build:all": "concurrently \"npm run build:server\" \"npm run build:client\"",
     "lint": "vue-cli-service lint",
     "build:client": "vue-cli-service build",
     "build:server": "cd server && tsc && cd ../ && webpack --mode production && rm -rf dist-server",
-    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\" ",
+    "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "dev:client": "vue-cli-service serve --port 3000",
-    "dev:server": "cross-env nodemon",
-    "generate:packagejson": "echo '{ \"scripts\": { \"start\": \"cross-env nodemon index.js\" } }' >> dev_package.json && mv dev_package.json dist/package.json"
+    "dev:server": "cross-env nodemon --watch server --exec ts-node ./server/index.ts",
+    "generate:packagejson": "echo '{ \"scripts\": { \"start\": \"cross-env nodemon index.js\" } }' >> dev_package.json && mv dev_package.json dist/package.json",
+    "start": "cross-env nodemon dist/index.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
