@@ -2,7 +2,8 @@ const express = require("express");
 const path = require("path");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const auth = require("./routes/auth");
+const { authInit } = require("./routes/auth");
+const { projectInit } = require("./routes/project");
 
 const app = express();
 require("dotenv").config();
@@ -29,7 +30,8 @@ app.use(function (req, res, next) {
 // Serve static files from the dist directory
 app.use(express.static(path.join(__dirname)));
 
-auth.authInit(prefix, app);
+authInit(prefix, app);
+projectInit(prefix, app);
 
 app.get("/api/test", (req, res) => {
   res.status(200).json({ test: "test" });

@@ -3,12 +3,15 @@ import { InjectionKey } from "vue";
 import { createStore, Store, ActionContext } from "vuex";
 
 import AuthModule, { AuthState } from "./auth";
+import ProjectModule, { ProjectState } from "./project";
 
 import createPersistedState from "vuex-persistedstate";
+import axios from "axios";
 
 // define your typings for the store state
 export interface State {
   auth: AuthState;
+  project: ProjectState;
   loggedIn: boolean;
 }
 
@@ -19,6 +22,7 @@ export const store = createStore<State>({
   state: { loggedIn: false } as State,
   modules: {
     auth: AuthModule,
+    project: ProjectModule,
   },
   mutations: {
     setLoggedIn(state: State, data: boolean) {
@@ -34,7 +38,7 @@ export const store = createStore<State>({
     logout() {
       this.commit("auth/resetState");
       this.commit("setLoggedIn", false);
-      this.state.loggedIn = false;
+      axios.get("/api/auth/logout", { withCredentials: true });
       location.href = "/";
     },
   },

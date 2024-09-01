@@ -1,19 +1,19 @@
 import { State, store } from "../index";
-import { User, _User } from "@/models/Auth";
+import { _User } from "@/models/Auth";
 import { Commit, ActionContext } from "vuex";
 import Cookies from "js-cookie";
 import * as util from "@/utils";
 import axios from "axios";
 
 export interface AuthState {
-  currentUser: _User;
+  currentUser: _User | null;
   users: _User[];
 }
 
 const AuthModule = {
   namespaced: true,
   state: (): AuthState => ({
-    currentUser: User.createEmptyObject(),
+    currentUser: null,
     users: [],
   }),
   getters: {
@@ -47,16 +47,12 @@ const AuthModule = {
     },
     async loadUsers(context: ActionContext<AuthState, State>): Promise<void> {
       try {
-        const response = await axios.get(
-          `${process.env.VUE_APP_API_URL}/user/list`,
-          {
-            headers: {
-              Authorization: `Bearer ${Cookies.get("local._token")}`,
-              withCredentials: true,
-            },
-          }
-        );
-        context.commit("setUsers", response.data.data);
+        const response = await axios.get(`/api/auth/users`, {
+          headers: {
+            withCredentials: true,
+          },
+        });
+        context.commit("setUsers", response.data);
       } catch (e) {
         console.log(e);
         store.dispatch("handleRequestErrors", e);
@@ -71,29 +67,14 @@ const AuthModule = {
         const loginResponse = await axios.get(`/api/auth/login/${code}`);
 
         if (loginResponse.status == 200) {
+          context.commit("setCurrentUser", loginResponse.data);
           store.commit("setLoggedIn", true);
-          location.href = "/dashboard";
+          location.reload();
         } else {
           context.commit("setCurrentUser", null);
           store.commit("setLoggedIn", false);
-          location.href = "/";
+          location.reload();
         }
-        // const lr = new Login(loginResponse);
-        // if (lr.token && lr.user) {
-        //   Cookies.set("local._token", lr.token, {
-        //     secure: true,
-        //     sameSite: "strict",
-        //     path: "/",
-        //   });
-        //   Cookies.set("userId", lr.user._id);
-        //   context.commit("setCurrentUser", lr.user);
-        //   store.commit("setLoggedIn", true);
-        //   location.reload();
-        // } else {
-        //   Cookies.remove("token");
-        //   context.commit("setCurrentUser", null);
-        //   store.commit("setLoggedIn", false);
-        // }
       } catch (e) {
         console.log(e);
         store.dispatch("handleRequestErrors", e);
@@ -104,7 +85,7 @@ const AuthModule = {
 
 const getDefaultState = () => {
   return {
-    currentUser: User.createEmptyObject(),
+    currentUser: null,
     users: [],
   };
 };

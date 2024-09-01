@@ -1,23 +1,25 @@
-import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
-import Index from "../views/Index.vue";
-import Dashboard from "@/views/Dashboard.vue";
-
-const routes: Array<RouteRecordRaw> = [
-  {
-    path: "/",
-    name: "/",
-    component: Index,
-  },
-  {
-    path: "/dashboard",
-    name: "dashboard",
-    component: Dashboard,
-  },
-];
+import { createRouter, createWebHistory } from "vue-router";
+import { useStore } from "vuex";
+import { key } from "../store";
+import routes from "./routes";
 
 const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
+  history: createWebHistory(),
   routes,
+});
+
+router.beforeEach((to /*, from*/) => {
+  const store = useStore(key);
+
+  if (store.state.auth) {
+    if (!store.state.auth.currentUser) {
+      if (to.name == "index") return;
+      else return "/";
+    } else {
+      if (to.name == "index") return "/dashboard";
+      else return;
+    }
+  }
 });
 
 export default router;

@@ -53,16 +53,7 @@ exports.login = async (req, res) => {
           sameSite: "strict",
         });
 
-        res.cookie(
-          "user",
-          Buffer.from(JSON.stringify(user)).toString("base64"),
-          {
-            secure: true,
-            sameSite: "strict",
-          }
-        );
-
-        res.status(200).json({ message: "Authentication Success!" });
+        res.status(200).json(user);
       } else {
         res.status(400).json({ error: "Authentication Error!" });
       }
@@ -74,5 +65,15 @@ exports.login = async (req, res) => {
     res.status(500).json({ error: e.message });
   } finally {
     util.closeMongooseConnection();
+  }
+};
+
+exports.logout = async (req, res) => {
+  try {
+    res.clearCookie("token");
+    res.send();
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ error: e.message });
   }
 };

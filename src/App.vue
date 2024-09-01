@@ -27,7 +27,6 @@ import { ref, watch } from "vue";
 import { useStore } from "vuex";
 import { key } from "./store";
 import "@/utils/uiTools";
-import Cookies from "js-cookie";
 
 const route = useRoute();
 const store = useStore(key);
@@ -38,11 +37,7 @@ let showHeader = ref(false);
 let userTheme = ref(localStorage.getItem("userTheme"));
 
 watch(route, async () => {
-  if (
-    !(route.name == "index" || route.name == "workspaces") &&
-    Cookies.get("local._token")
-  )
-    showHeader.value = true;
+  if (!(route.name == "index") && user) showHeader.value = true;
   else showHeader.value = false;
 
   userTheme = ref(localStorage.getItem("userTheme"));
