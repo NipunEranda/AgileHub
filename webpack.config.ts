@@ -31,7 +31,7 @@ const serverConfig = Object.assign({}, config, {
   // set target to node to fix build warnings
   target: "node",
   name: "server",
-  entry: __dirname + "/server/index.js",
+  entry: __dirname + "/dist-server/index.js",
   output: {
     path: path.resolve(__dirname + "/dist"),
     filename: "index.js",
