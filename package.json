@@ -8,11 +8,12 @@
     "lint": "vue-cli-service lint",
     "build:client": "vue-cli-service build",
     "build:server": "cd server && tsc && cd ../ && webpack --mode production && rm -rf dist-server",
+    "build:clean": "rm -rf dist",
     "dev": "concurrently \"npm run dev:client\" \"npm run dev:server\"",
     "dev:client": "vue-cli-service serve --port 3000",
     "dev:server": "cross-env nodemon --watch server --exec ts-node ./server/index.ts",
-    "generate:packagejson": "echo '{ \"scripts\": { \"start\": \"cross-env nodemon index.js\" } }' >> dev_package.json && mv dev_package.json dist/package.json",
-    "start": "cross-env nodemon dist/index.js"
+    "start": "cross-env nodemon dist/index.js",
+    "generate:packagejson": "echo '{ \"scripts\": { \"start\": \"cross-env nodemon index.js\" } }' >> dev_package.json && mv dev_package.json dist/package.json"
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
