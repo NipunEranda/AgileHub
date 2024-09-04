@@ -6,7 +6,6 @@ import AuthModule, { AuthState } from "./auth";
 import ProjectModule, { ProjectState } from "./project";
 
 import createPersistedState from "vuex-persistedstate";
-import axios from "axios";
 
 // define your typings for the store state
 export interface State {
@@ -38,7 +37,7 @@ export const store = createStore<State>({
     logout() {
       this.commit("auth/resetState");
       this.commit("setLoggedIn", false);
-      axios.get("/api/auth/logout", { withCredentials: true });
+      fetch("/api/auth/logout", { credentials: "include" });
       location.href = "/";
     },
   },

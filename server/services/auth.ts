@@ -1,9 +1,3 @@
-// const axios = require("axios");
-// const github = require("./github");
-// const { userSchema } = require("../models/User");
-// const util = require("../models/Util");
-
-import axios from "axios";
 import { getUserDetails, getUserEmail } from "./github";
 import userSchema, { _User } from "../models/User";
 import { Request, Response } from "express";
@@ -14,22 +8,24 @@ export async function login(req: Request, res: Response) {
   try {
     let user: _User | null,
       userDocument: Document | null = null;
-    const response = await axios({
-      method: "post",
-      url: `https://github.com/login/oauth/access_token?client_id=${process.env.VUE_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_SECRET}&code=${req.params.code}&redirect_uri=${process.env.VUE_APP_GITHUB_REDIRECT_URI}`,
-      headers: {
-        accept: "application/json",
-      },
-    });
+    const response = await (await fetch(
+      `https://github.com/login/oauth/access_token?client_id=${process.env.VUE_APP_GITHUB_CLIENT_ID}&client_secret=${process.env.GITHUB_SECRET}&code=${req.params.code}&redirect_uri=${process.env.VUE_APP_GITHUB_REDIRECT_URI}`,
+      {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+        },
+      }
+    )).json();
 
-    if (!response.data.error) {
+    if (!response.error) {
       await connectMongoose();
       user = await new Promise(async (resolve, reject) => {
         let email: { email: string };
         Promise.all(
           [
-            getUserDetails(response.data.access_token),
-            getUserEmail(response.data.access_token),
+            getUserDetails(response.access_token),
+            getUserEmail(response.access_token),
           ].map(async (process, p) => {
             if (p == 0) user = await process;
             else email = await process;
@@ -55,7 +51,7 @@ export async function login(req: Request, res: Response) {
           userDocument = await userSchema.create(user);
         }
 
-        res.cookie("token", `Bearer ${response.data.access_token}`, {
+        res.cookie("token", `Bearer ${response.access_token}`, {
           httpOnly: true,
           secure: true,
           sameSite: "strict",

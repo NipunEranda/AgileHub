@@ -3,7 +3,6 @@ import { _User } from "@/models/Auth";
 import { Commit, ActionContext } from "vuex";
 import Cookies from "js-cookie";
 import * as util from "@/utils";
-import axios from "axios";
 
 export interface AuthState {
   currentUser: _User | null;
@@ -47,12 +46,10 @@ const AuthModule = {
     },
     async loadUsers(context: ActionContext<AuthState, State>): Promise<void> {
       try {
-        const response = await axios.get(`/api/auth/users`, {
-          headers: {
-            withCredentials: true,
-          },
-        });
-        context.commit("setUsers", response.data);
+        const response = await (
+          await fetch(`/api/auth/users`, { credentials: "include" })
+        ).json();
+        context.commit("setUsers", response);
       } catch (e) {
         console.log(e);
         store.dispatch("handleRequestErrors", e);
@@ -64,9 +61,11 @@ const AuthModule = {
     ): Promise<void> {
       try {
         util.showLoadingScreen();
-        const loginResponse = await axios.get(`/api/auth/login/${code}`);
-        if (loginResponse.status == 200) {
-          context.commit("setCurrentUser", loginResponse.data);
+        const loginResponse = await (
+          await fetch(`/api/auth/login/${code}`)
+        ).json();
+        if (loginResponse) {
+          context.commit("setCurrentUser", loginResponse);
           store.commit("setLoggedIn", true);
           location.reload();
         } else {

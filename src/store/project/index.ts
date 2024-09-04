@@ -1,4 +1,3 @@
-import axios from "axios";
 import { State, store } from "../";
 import { Commit, ActionContext } from "vuex";
 import { _Project } from "@/models/Project";
@@ -33,12 +32,10 @@ const ProjectModule = {
       context: ActionContext<ProjectState, State>
     ): Promise<void> {
       try {
-        const projectsResponse = await axios.get(`/api/project`, {
-          headers: {
-            withCredentials: true,
-          },
-        });
-        context.commit("setProjects", projectsResponse.data);
+        const projectsResponse = await (
+          await fetch(`/api/project`, { credentials: "include" })
+        ).json();
+        context.commit("setProjects", projectsResponse);
       } catch (e) {
         console.log(e);
         store.dispatch("handleRequestErrors", e);
@@ -49,13 +46,15 @@ const ProjectModule = {
       project: _Project
     ): Promise<void> {
       try {
-        const projectsResponse = await axios.post(`/api/project`, project, {
-          headers: {
-            withCredentials: true,
-          },
-        });
-        context.commit("setProjects", projectsResponse.data);
-        return projectsResponse.data;
+        const projectsResponse = await (
+          await fetch(`/api/project`, {
+            method: "POST",
+            body: JSON.stringify(project),
+            credentials: "include",
+          })
+        ).json();
+        context.commit("setProjects", projectsResponse);
+        return projectsResponse;
       } catch (e) {
         console.log(e);
         store.dispatch("handleRequestErrors", e);
@@ -66,13 +65,15 @@ const ProjectModule = {
       project: _Project
     ): Promise<void> {
       try {
-        const projectsResponse = await axios.put(`/api/project`, project, {
-          headers: {
-            withCredentials: true,
-          },
-        });
-        context.commit("setProjects", projectsResponse.data);
-        return projectsResponse.data;
+        const projectsResponse = await (
+          await fetch(`/api/project`, {
+            method: "PUT",
+            body: JSON.stringify(project),
+            credentials: "include",
+          })
+        ).json();
+        context.commit("setProjects", projectsResponse);
+        return projectsResponse;
       } catch (e) {
         console.log(e);
         store.dispatch("handleRequestErrors", e);
